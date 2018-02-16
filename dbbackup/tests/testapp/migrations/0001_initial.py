@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             name='ForeignKeyModel',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('field', models.ForeignKey(to='testapp.CharModel')),
+                ('field', models.ForeignKey(to='testapp.CharModel', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
