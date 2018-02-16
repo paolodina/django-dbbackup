@@ -173,9 +173,21 @@ def encrypt_file(inputfile, filename):
             inputfile.seek(0)
             always_trust = settings.GPG_ALWAYS_TRUST
             g = gnupg.GPG()
-            result = g.encrypt_file(inputfile, output=filepath,
-                                    recipients=settings.GPG_RECIPIENT,
-                                    always_trust=always_trust)
+
+            try:
+                # TODO: update python gnupg version in requirements
+                g.encrypt_file
+            except AttributeError:
+                # new API
+                # https://pythonhosted.org/python-gnupg/index.html#encryption-and-decryption
+                result = g.encrypt(inputfile, output=filepath,
+                                        recipients=settings.GPG_RECIPIENT,
+                                        always_trust=always_trust)
+            else:
+                # old api
+                result = g.encrypt_file(inputfile, output=filepath,
+                                        recipients=settings.GPG_RECIPIENT,
+                                        always_trust=always_trust)
             inputfile.close()
             if not result:
                 msg = 'Encryption failed; status: %s' % result.status
